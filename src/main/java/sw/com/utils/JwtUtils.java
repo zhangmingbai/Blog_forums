@@ -68,7 +68,7 @@ public class JwtUtils {
      * @param user 用户信息
      * @return 令牌
      */
-    public String createJwt(UserDetails user, String username, int userId) {
+    public String createJwt(UserDetails user,int userId, String username ) {
         Algorithm algorithm = Algorithm.HMAC256(key);
         Date expire = this.expireTime();
         return JWT.create()

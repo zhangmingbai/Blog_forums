@@ -1,7 +1,6 @@
 package sw.com.config;
 
 import jakarta.annotation.Resource;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -13,25 +12,28 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import sw.com.entity.RestBean;
+import sw.com.entity.dto.Account;
 import sw.com.entity.vo.AuthorizeVO;
 import sw.com.filter.JwtAuthenticationFilter;
+import sw.com.service.AccountService;
 import sw.com.utils.JwtUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
 @Configuration
-public class SecurityConfig {
+public class SecurityConfiguration {
     @Resource
     JwtUtils utils;
 
     @Resource
     JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Resource
+    AccountService accountService;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -65,11 +67,12 @@ public class SecurityConfig {
                                         Authentication authentication) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         User user = (User) authentication.getPrincipal();
-        String token = utils.createJwt(user,"小明",1);
+        Account account = accountService.findAccountByNameOrEmail(user.getUsername());
+        String token = utils.createJwt(user, account.getId(), account.getUsername());
         AuthorizeVO vo = new AuthorizeVO();
         vo.setExpire(utils.expireTime());
-        vo.setUsername("小明");
-        vo.setRole("");
+        vo.setUsername(account.getUsername());
+        vo.setRole(account.getRole());
         vo.setToken(token);
         response.getWriter().write(RestBean.success(vo).asJsonString());
     }
