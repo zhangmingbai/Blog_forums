@@ -10,6 +10,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * createDate 2023-11-14 21:29:48
 */
 public interface AccountService extends IService<Account>, UserDetailsService {
-
     Account findAccountByNameOrEmail(String text);
+    String registerEmailVerifyCode(String type,String email,String ip);
 }

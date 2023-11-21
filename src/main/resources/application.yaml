@@ -1,4 +1,12 @@
 spring:
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 3039988039@qq.com
+    password: ozixvxiioyjjdegb
+  rabbitmq:
+    addresses: localhost
+    virtual-host: /
   security:
     jwt:
       key: asdfghjkl
