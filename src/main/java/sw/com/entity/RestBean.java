@@ -29,7 +29,7 @@ public record RestBean<T> (long id, int code, T data, String message) {
     public static <T> RestBean<T> unauthorized(String message){
         return failure(401, message);
     }
-
+    
     public static <T> RestBean<T> failure(int code, String message){
         return new RestBean<>(requestId(), code, null, message);
     }

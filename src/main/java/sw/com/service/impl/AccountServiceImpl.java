@@ -3,7 +3,6 @@ package sw.com.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,8 +30,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account>
     @Resource
     AmqpTemplate amqpTemplate;
 
-    @Autowired
-    StringRedisTemplate redisTemplate;
+    @Resource
+    StringRedisTemplate stringRedisTemplate;
 
     @Resource
     FlowUtils utils;
@@ -75,7 +74,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account>
             int code = random.nextInt(899999) + 100000;
             Map<String,Object> data = Map.of("type",type,"email",email,"code",code);
             amqpTemplate.convertAndSend("mail",data);
-            redisTemplate.opsForValue()
+            stringRedisTemplate.opsForValue()
                     .set(Const.VERIFY_EMAIL_DATA + email,String.valueOf(code),3, TimeUnit.MINUTES);
             return null;
         }

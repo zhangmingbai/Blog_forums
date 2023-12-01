@@ -31,8 +31,7 @@ public class MailQueueListener {
     public void sendMailMessage(Map<String, Object> data) {
         String email = data.get("email").toString();
         Integer code = (Integer) data.get("code");
-        String type = (String) data.get("type");
-        SimpleMailMessage message = switch (type) {
+        SimpleMailMessage message = switch (data.get("type").toString()) {
             case "register" ->
                     createMessage("欢迎注册我们的网站",
                             "您的邮件注册验证码为: "+code+"，有效时间3分钟，为了保障您的账户安全，请勿向他人泄露验证码信息。",
