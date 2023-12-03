@@ -1,15 +1,17 @@
 package sw.com.service;
 
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import sw.com.entity.dto.Account;
-import com.baomidou.mybatisplus.extension.service.IService;
+import sw.com.entity.vo.ConfirmResetVO;
+import sw.com.entity.vo.EmailRegisterVO;
+import sw.com.entity.vo.EmailResetVO;
 
-/**
-* @author 张培辉
-* description 针对表【account】的数据库操作Service
-* createDate 2023-11-14 21:29:48
-*/
 public interface AccountService extends IService<Account>, UserDetailsService {
     Account findAccountByNameOrEmail(String text);
-    String registerEmailVerifyCode(String type,String email,String ip);
+    String registerEmailVerifyCode(String type, String email, String address);
+    String registerEmailAccount(EmailRegisterVO info);
+    String resetEmailAccountPassword(EmailResetVO info);
+    String resetConfirm(ConfirmResetVO info);
 }
