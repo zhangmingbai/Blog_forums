@@ -31,15 +31,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authorization = request.getHeader("Authorization");
-        DecodedJWT jwt = utils.resolveJwt(authorization);
-        if(jwt != null) {
-            UserDetails user = utils.toUser(jwt);
+        String authorization = request.getHeader("Authorization");  // 获取请求头中的令牌
+        DecodedJWT jwt = utils.resolveJwt(authorization);  // 解析令牌
+        if(jwt != null) {  // 如果令牌不为空
+            UserDetails user = utils.toUser(jwt);  // 将令牌转换为用户信息
+            System.out.println(user);
             UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            request.setAttribute(Const.ATTR_USER_ID, utils.toId(jwt));
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user, user.getAuthorities());  // 构建验证令牌
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));  // 设置验证令牌的详细信息
+            SecurityContextHolder.getContext().setAuthentication(authentication);  // 将验证令牌放入安全上下文
+            request.setAttribute(Const.ATTR_USER_ID, utils.toId(jwt));  // 将用户ID放入请求属性
         }
         filterChain.doFilter(request, response);
     }

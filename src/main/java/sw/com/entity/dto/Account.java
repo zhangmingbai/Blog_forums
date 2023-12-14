@@ -11,18 +11,55 @@ import java.util.Date;
 
 /**
  * 
- * TableName account
+ * @TableName account
  */
 @TableName(value ="account")
 @Data
 @AllArgsConstructor
 public class Account implements Serializable {
-
-    @TableId(value = "id", type = IdType.AUTO)
+    /**
+     * ID
+     */
+    @TableId(type = IdType.AUTO)
     private Integer id;
+
+    /**
+     * 用户名
+     */
     private String username;
+
+    /**
+     * 密码
+     */
     private String password;
-    private String email;
+
+    /**
+     * 姓名
+     */
+    private String name;
+
+    /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
+     * 角色标识
+     */
     private String role;
+
+    /**
+     * 电话
+     */
+    private String phone;
+
+    /**
+     * 邮箱
+     */
+    private String email;
+
+    /**
+     * 注册时间
+     */
     private Date registerTime;
 }

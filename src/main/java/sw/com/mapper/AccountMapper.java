@@ -1,8 +1,10 @@
 package sw.com.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import sw.com.entity.dto.Account;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
 * @author 张培辉
@@ -12,7 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 @Mapper
 public interface AccountMapper extends BaseMapper<Account> {
-
+    List<Account> selectAll(Account account);
 }
 
 

@@ -41,15 +41,15 @@ public class JwtUtils {
      * @param headerToken 请求头中携带的令牌
      * @return 是否操作成功
      */
-    public boolean invalidateJwt(String headerToken){
-        String token = this.convertToken(headerToken);
-        Algorithm algorithm = Algorithm.HMAC256(key);
-        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+    public boolean invalidateJwt(String headerToken){  // 使令牌失效
+        String token = this.convertToken(headerToken); // 转换令牌
+        Algorithm algorithm = Algorithm.HMAC256(key);  // 签名算法
+        JWTVerifier jwtVerifier = JWT.require(algorithm).build();  // 构建JWT验证器
         try {
-            DecodedJWT verify = jwtVerifier.verify(token);
-            return deleteToken(verify.getId(), verify.getExpiresAt());
+            DecodedJWT verify = jwtVerifier.verify(token);  // 验证令牌
+            return deleteToken(verify.getId(), verify.getExpiresAt());  // 将令牌列入黑名单
         } catch (JWTVerificationException e) {
-            return false;
+            return false;  // 验证失败
         }
     }
 
@@ -99,18 +99,18 @@ public class JwtUtils {
      * @param headerToken 请求头中携带的令牌
      * @return DecodedJWT
      */
-    public DecodedJWT resolveJwt(String headerToken){
-        String token = this.convertToken(headerToken);
-        if(token == null) return null;
-        Algorithm algorithm = Algorithm.HMAC256(key);
-        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-        try {
-            DecodedJWT verify = jwtVerifier.verify(token);
-            if(this.isInvalidToken(verify.getId())) return null;
-            Date expiresAt = verify.getExpiresAt();
-            return new Date().after(expiresAt) ? null : verify;
-        } catch (JWTVerificationException e) {
-            return null;
+    public DecodedJWT resolveJwt(String headerToken){  // 解析令牌
+        String token = this.convertToken(headerToken);  // 转换令牌
+        if(token == null) return null;  // 令牌为空
+        Algorithm algorithm = Algorithm.HMAC256(key);  // 签名算法
+        JWTVerifier jwtVerifier = JWT.require(algorithm).build();  // 构建JWT验证器
+        try {  // 验证令牌
+            DecodedJWT verify = jwtVerifier.verify(token);  // 验证令牌
+            if(this.isInvalidToken(verify.getId())) return null;   // 令牌已失效
+            Date expiresAt = verify.getExpiresAt();  // 过期时间
+            return new Date().after(expiresAt) ? null : verify;  // 令牌已过期
+        } catch (JWTVerificationException e) {  // 验证失败
+            return null;  // 验证失败
         }
     }
 
@@ -158,8 +158,8 @@ public class JwtUtils {
      * @param uuid 令牌ID
      * @return 是否操作成功
      */
-    private boolean isInvalidToken(String uuid){
-        return Boolean.TRUE.equals(template.hasKey(Const.JWT_BLACK_LIST + uuid));
+    private boolean isInvalidToken(String uuid){  // 验证令牌是否失效
+        return Boolean.TRUE.equals(template.hasKey(Const.JWT_BLACK_LIST + uuid));  // 令牌已失效
     }
 
 }

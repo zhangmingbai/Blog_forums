@@ -9,7 +9,6 @@ class SpringbootApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(new BCryptPasswordEncoder().encode("abc123"));
+        System.out.println(new BCryptPasswordEncoder().encode("123456"));
     }
-
 }

@@ -31,14 +31,13 @@ public class SecurityConfiguration {
 
     @Resource
     JwtAuthenticationFilter jwtAuthenticationFilter;
-
     @Resource
     AccountService accountService;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(conf ->conf
-                    .requestMatchers("/api/auth/**","error").permitAll()
+                    .requestMatchers("/api/auth/**","error","/notice/**","/user/**").permitAll()
                     .anyRequest().authenticated()
                 )
                 .formLogin(conf ->conf
@@ -58,7 +57,7 @@ public class SecurityConfiguration {
                 .sessionManagement(conf ->conf
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -72,7 +71,11 @@ public class SecurityConfiguration {
         AuthorizeVO vo = new AuthorizeVO();
         vo.setExpire(utils.expireTime());
         vo.setUsername(account.getUsername());
+        vo.setName(account.getName());
+        vo.setAvatar(account.getAvatar());
         vo.setRole(account.getRole());
+        vo.setEmail(account.getEmail());
+        vo.setPhone(account.getPhone());
         vo.setToken(token);
         response.getWriter().write(RestBean.success(vo).asJsonString());
     }

@@ -81,6 +81,7 @@ public class AuthorizeController {
                 accountService.resetEmailAccountPassword(vo));
     }
 
+
     /**
      * 针对于返回值为String作为错误信息的方法进行统一处理
      * @param action 具体操作

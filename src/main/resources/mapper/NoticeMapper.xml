@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sw.com.mapper.NoticeMapper">
+
+    <sql id="Base_Column_List">
+        id,title,content,time,user
+    </sql>
+
+    <select id="selectAll" resultType="sw.com.entity.dto.Notice">
+        select
+        <include refid="Base_Column_List" />
+        from notice
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="title != null"> and title like concat('%', #{title}, '%')</if>
+            <if test="content != null"> and content= #{content}</if>
+            <if test="time != null"> and time= #{time}</if>
+            <if test="user != null"> and user= #{user}</if>
+        </where>
+        order by id desc
+    </select>
+
+
+</mapper>

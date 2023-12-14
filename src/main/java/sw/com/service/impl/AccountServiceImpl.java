@@ -2,6 +2,8 @@ package sw.com.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,6 +22,7 @@ import sw.com.utils.Const;
 import sw.com.utils.FlowUtils;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +38,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
     @Resource
     StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    AccountMapper accountMapper;
 
     @Resource
     PasswordEncoder passwordEncoder;
@@ -96,7 +102,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         if(this.existsAccountByUsername(username)) return "该用户名已被他人使用，请重新更换";
         String password = passwordEncoder.encode(info.getPassword());
         Account account = new Account(null, info.getUsername(),
-                password, email, Const.ROLE_DEFAULT, new Date());
+                password,null , null,Const.ROLE_DEFAULT,
+                null,email,new Date());
         if(!this.save(account)) {
             return "内部错误，注册失败";
         } else {
@@ -136,6 +143,21 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         if(!code.equals(info.getCode())) return "验证码错误，请重新输入";
         return null;
     }
+
+    /**
+     * 分页查询账户信息
+     * @param account 查询条件
+     * @param pageNum 页码
+     * @param pageSize 页大小
+     * @return 分页结果
+     */
+    @Override
+    public PageInfo<Account> selectPage(Account account, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Account> list = accountMapper.selectAll(account);
+        return PageInfo.of(list);
+    }
+
 
     /**
      * 移除Redis中存储的邮件验证码

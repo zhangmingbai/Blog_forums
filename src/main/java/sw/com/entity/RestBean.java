@@ -13,9 +13,9 @@ import java.util.Optional;
  * @param message 其他消息
  * @param <T> 响应数据类型
  */
-public record RestBean<T> (long id, int code, T data, String message) {
+public record RestBean<T> (int code, T data, String message) {
     public static <T> RestBean<T> success(T data){
-        return new RestBean<>(requestId(), 200, data, "请求成功");
+        return new RestBean<>(200, data, "请求成功");
     }
 
     public static <T> RestBean<T> success(){
@@ -31,7 +31,7 @@ public record RestBean<T> (long id, int code, T data, String message) {
     }
     
     public static <T> RestBean<T> failure(int code, String message){
-        return new RestBean<>(requestId(), code, null, message);
+        return new RestBean<>(code, null, message);
     }
 
     /**
@@ -40,14 +40,5 @@ public record RestBean<T> (long id, int code, T data, String message) {
      */
     public String asJsonString() {
         return JSONObject.toJSONString(this, JSONWriter.Feature.WriteNulls);
-    }
-
-    /**
-     * 获取当前请求ID方便快速定位错误
-     * @return ID
-     */
-    private static long requestId(){
-        String requestId = Optional.ofNullable(MDC.get("reqId")).orElse("0");
-        return Long.parseLong(requestId);
     }
 }
