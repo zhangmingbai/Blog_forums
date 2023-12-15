@@ -37,7 +37,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(conf ->conf
-                    .requestMatchers("/api/auth/**","error","/notice/**","/user/**","/files/**").permitAll()
+                    .requestMatchers("/api/auth/**","error","/notice/**","/user/**","/files/**",
+                            "/category/**").permitAll()
                     .anyRequest().authenticated()
                 )
                 .formLogin(conf ->conf
