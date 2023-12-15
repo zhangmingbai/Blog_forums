@@ -1,6 +1,3 @@
-server:
-  port: 8080
-ip: localhost
 spring:
   mail:
     host: smtp.qq.com
