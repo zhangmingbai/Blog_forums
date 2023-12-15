@@ -2,9 +2,6 @@ package sw.com.entity;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
-import org.slf4j.MDC;
-
-import java.util.Optional;
 
 /**
  * 响应实体类封装，Rest风格

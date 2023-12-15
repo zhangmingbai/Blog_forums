@@ -9,6 +9,7 @@ import java.util.Date;
  */
 @Data
 public class AuthorizeVO {
+    Integer id;
     String username;
     String name;
     String avatar;
