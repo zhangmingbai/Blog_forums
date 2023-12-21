@@ -9,6 +9,7 @@ import sw.com.entity.dto.Blog;
 import sw.com.service.BlogService;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 博客信息前端操作接口
@@ -75,5 +76,13 @@ public class BlogController {
     public RestBean<List<Blog>> selectTop() {
         List<Blog> list = blogService.selectTop();
         return RestBean.success(list);
+    }
+    /**
+     * 博客推荐
+     */
+    @GetMapping("/selectRecommend/{blogId}")
+    public RestBean<Set<Blog>> selectRecommend(@PathVariable Integer blogId) {
+        Set<Blog> blogSet = blogService.selectRecommend(blogId);
+        return RestBean.success(blogSet);
     }
 }

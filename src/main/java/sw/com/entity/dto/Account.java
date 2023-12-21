@@ -57,9 +57,17 @@ public class Account implements Serializable {
      * 邮箱
      */
     private String email;
+    /**
+     * 简介
+     */
+    private String info;
 
     /**
      * 注册时间
      */
     private Date registerTime;
+
+    public Account() {
+
+    }
 }

@@ -19,7 +19,7 @@
     <sql id="Base_Column_List">
         id,username,password,
         name,avatar,role,
-        phone,email,register_time
+        phone,email,info,register_time
     </sql>
 
     <select id="selectAll" resultType="sw.com.entity.dto.Account">
@@ -35,6 +35,7 @@
             <if test="role != null"> and role= #{role}</if>
             <if test="phone != null"> and phone= #{phone}</if>
             <if test="email != null"> and email= #{email}</if>
+            <if test="info != null"> and info= #{info}</if>
             <if test="registerTime != null"> and register_time= #{registerTime}</if>
         </where>
     </select>

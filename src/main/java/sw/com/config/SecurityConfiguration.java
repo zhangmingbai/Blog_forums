@@ -38,7 +38,7 @@ public class SecurityConfiguration {
         return http
                 .authorizeHttpRequests(conf ->conf
                     .requestMatchers("/api/auth/**","error","/notice/**","/user/**","/files/**",
-                            "/category/**","/blog/**").permitAll()
+                            "/category/**","/blog/**","likes/**","collect/**").permitAll()
                     .anyRequest().authenticated()
                 )
                 .formLogin(conf ->conf
@@ -65,9 +65,9 @@ public class SecurityConfiguration {
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        response.setContentType("application/json;charset=utf-8");
-        User user = (User) authentication.getPrincipal();
-        Account account = accountService.findAccountByNameOrEmail(user.getUsername());
+        response.setContentType("application/json;charset=utf-8");  // 设置响应类型
+        User user = (User) authentication.getPrincipal();  // 获取当前用户
+        Account account = accountService.findAccountByNameOrEmail(user.getUsername());  // 获取用户信息
         String token = utils.createJwt(user, account.getId(), account.getUsername());
         AuthorizeVO vo = new AuthorizeVO();
         vo.setId(account.getId());
@@ -79,7 +79,7 @@ public class SecurityConfiguration {
         vo.setEmail(account.getEmail());
         vo.setPhone(account.getPhone());
         vo.setToken(token);
-        response.getWriter().write(RestBean.success(vo).asJsonString());
+        response.getWriter().write(RestBean.success(vo).asJsonString());  // 返回用户信息
     }
 
     /**
@@ -88,14 +88,14 @@ public class SecurityConfiguration {
     private void onLogoutSuccess(HttpServletRequest request,
                                  HttpServletResponse response,
                                  Authentication authentication) throws IOException {
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter writer = response.getWriter();
-        String authorization = request.getHeader("Authorization");
-        if(utils.invalidateJwt(authorization)) {
-            writer.write(RestBean.success("退出登录成功").asJsonString());
+        response.setContentType("application/json;charset=utf-8");  // 设置响应类型
+        PrintWriter writer = response.getWriter();  // 获取响应输出流
+        String authorization = request.getHeader("Authorization");  // 获取请求头中的令牌
+        if(utils.invalidateJwt(authorization)) {  // 使令牌失效
+            writer.write(RestBean.success("退出登录成功").asJsonString()); // 返回成功信息
             return;
         }
-        writer.write(RestBean.failure(400, "退出登录失败").asJsonString());
+        writer.write(RestBean.failure(400, "退出登录失败").asJsonString()); // 返回失败信息
     }
 
 
@@ -119,5 +119,4 @@ public class SecurityConfiguration {
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(RestBean.unauthorized(exception.getMessage()).asJsonString());
     }
-
 }

@@ -161,5 +161,4 @@ public class JwtUtils {
     private boolean isInvalidToken(String uuid){  // 验证令牌是否失效
         return Boolean.TRUE.equals(template.hasKey(Const.JWT_BLACK_LIST + uuid));  // 令牌已失效
     }
-
 }

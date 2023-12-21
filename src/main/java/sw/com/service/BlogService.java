@@ -5,6 +5,7 @@ import sw.com.entity.dto.Blog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Set;
 
 /**
 * @author 张培辉
@@ -20,4 +21,6 @@ public interface BlogService extends IService<Blog> {
     List<Blog> selectTop();
 
     Blog selectById(Integer id);
+
+    Set<Blog> selectRecommend(Integer blogId);
 }

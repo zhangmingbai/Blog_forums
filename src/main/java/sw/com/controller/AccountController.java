@@ -21,7 +21,7 @@ public class AccountController {
     @PostMapping("/add")
     public RestBean<Void> add(@RequestBody Account account) {
         Account acc = new Account(null,account.getUsername(),new BCryptPasswordEncoder().encode("123456"),account.getName(),account.getAvatar(),
-                "user",account.getPhone(),account.getEmail(),new Date());
+                "user",account.getPhone(),account.getEmail(),null,new Date());
         accountService.save(acc);
         return RestBean.success();
     }

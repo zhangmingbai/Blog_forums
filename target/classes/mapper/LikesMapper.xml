@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sw.com.mapper.LikesMapper">
+
+    <resultMap id="BaseResultMap" type="sw.com.entity.dto.Likes">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="fid" column="fid" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="module" column="module" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,fid,user_id,
+        module
+    </sql>
+    <select id="selectByFidAndModule" resultType="java.lang.Integer">
+        select count(*) from likes where fid = #{fid} and module = #{module}
+    </select>
+    <select id="selectUserLikes" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from likes
+        where fid = #{fid}  and user_id = #{userId} and module = #{module}
+    </select>
+</mapper>

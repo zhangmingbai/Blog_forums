@@ -67,6 +67,18 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     }
 
     /**
+     * 通过用户名或邮件地址查找用户
+     * @param text 用户名或邮件
+     * @return 账户实体
+     */
+    public Account findAccountByNameOrEmail(String text){
+        return this.query()
+                .eq("username", text).or()
+                .eq("email", text)
+                .one();
+    }
+
+    /**
      * 生成注册验证码存入Redis中，并将邮件发送请求提交到消息队列等待发送
      * @param type 类型
      * @param email 邮件地址
@@ -103,7 +115,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         String password = passwordEncoder.encode(info.getPassword());
         Account account = new Account(null, info.getUsername(),
                 password,null , null,Const.ROLE_DEFAULT,
-                null,email,new Date());
+                null,email,null,new Date());
         if(!this.save(account)) {
             return "内部错误，注册失败";
         } else {
@@ -188,17 +200,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         return flow.limitOnceCheck(key, 60);
     }
 
-    /**
-     * 通过用户名或邮件地址查找用户
-     * @param text 用户名或邮件
-     * @return 账户实体
-     */
-    public Account findAccountByNameOrEmail(String text){
-        return this.query()
-                .eq("username", text).or()
-                .eq("email", text)
-                .one();
-    }
+
 
     /**
      * 查询指定邮箱的用户是否已经存在
@@ -206,7 +208,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
      * @return 是否存在
      */
     private boolean existsAccountByEmail(String email){
-        return this.baseMapper.exists(Wrappers.<Account>query().eq("email", email));
+        return this.baseMapper.exists(Wrappers.<Account>query().eq("email", email));  // 查询指定邮箱的用户是否已经存在
     }
 
     /**
@@ -215,6 +217,6 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
      * @return 是否存在
      */
     private boolean existsAccountByUsername(String username){
-        return this.baseMapper.exists(Wrappers.<Account>query().eq("username", username));
+        return this.baseMapper.exists(Wrappers.<Account>query().eq("username", username));  // 查询指定用户名的用户是否已经存在
     }
 }

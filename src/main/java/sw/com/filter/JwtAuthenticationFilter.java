@@ -35,7 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         DecodedJWT jwt = utils.resolveJwt(authorization);  // 解析令牌
         if(jwt != null) {  // 如果令牌不为空
             UserDetails user = utils.toUser(jwt);  // 将令牌转换为用户信息
-            System.out.println(user);
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user, user.getAuthorities());  // 构建验证令牌
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));  // 设置验证令牌的详细信息
