@@ -18,9 +18,9 @@
     <select id="selectByFidAndModule" resultType="java.lang.Integer">
         select count(*) from likes where fid = #{fid} and module = #{module}
     </select>
-    <select id="selectUserLikes" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
+
+    <select id="selectUserLikes" resultType="sw.com.entity.dto.Likes">
+        select *
         from likes
         where fid = #{fid}  and user_id = #{userId} and module = #{module}
     </select>

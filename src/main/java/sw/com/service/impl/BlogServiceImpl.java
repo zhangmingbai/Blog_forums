@@ -10,6 +10,8 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import sw.com.entity.dto.Account;
 import sw.com.entity.dto.Blog;
+import sw.com.entity.dto.Collect;
+import sw.com.entity.dto.Likes;
 import sw.com.entity.enums.LinkesModuleEnum;
 import sw.com.mapper.BlogMapper;
 import sw.com.service.AccountService;
@@ -68,8 +70,17 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         Blog blog = blogMapper.selectById(id);  //获取博客信息
         Account account = accountService.getById(blog.getUserId());  //获取发布人信息
         blog.setAccount(account);  //设置发布人信息
+        // 查询当前博客的点赞数据
         int likesCount = likesService.selectByFidAndModule(id, LinkesModuleEnum.BLOG.getValue());
         blog.setLikesCount(likesCount);  //设置点赞数
+        Likes likes = likesService.selectUserLikes(id, LinkesModuleEnum.BLOG.getValue());
+        blog.setUserLike(likes != null);  //设置当前用户是否点赞
+
+        // 查询当前博客的收藏数据
+        int collectCount = collectService.selectByFidAndModule(id, LinkesModuleEnum.BLOG.getValue());
+        blog.setCollectCount(collectCount);
+        Collect userCollect = collectService.selectUserCollect(id, LinkesModuleEnum.BLOG.getValue());
+        blog.setUserCollect(userCollect != null);
         return blog;
     }
 

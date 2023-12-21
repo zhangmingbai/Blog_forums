@@ -16,12 +16,10 @@
         module
     </sql>
     <select id="selectUserCollect" resultType="sw.com.entity.dto.Collect">
-        select count(*) from collect where fid = #{fid} and module = #{module}
+        select * from collect where fid = #{fid} and user_id = #{userId} and module = #{module}
     </select>
+
     <select id="selectByFidAndModule" resultType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from likes
-        where fid = #{fid}  and user_id = #{userId} and module = #{module}
+        select count(*) from collect where fid = #{fid} and module = #{module}
     </select>
 </mapper>

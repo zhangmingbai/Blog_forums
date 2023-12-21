@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sw.com.entity.dto.Likes;
 import sw.com.mapper.LikesMapper;
 import sw.com.service.LikesService;
+import sw.com.utils.UserIdUtil;
 
 /**
 * @author 张培辉
@@ -18,11 +19,13 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes>
     @Resource
     LikesMapper likesMapper;
 
+    @Resource
+    UserIdUtil userIdUtil;
 
     @Override
     public void set(Likes likes) {
-        //获取登录用户的id
-        likes.setUserId(likes.getUserId());
+        Integer userId = userIdUtil.getUserId();  //获取登录用户的id
+        likes.setUserId(userId);  //设置点赞用户的id
         Likes likes1 = likesMapper.selectUserLikes(likes);
         if (likes1 == null) {
             likesMapper.insert(likes);
@@ -35,7 +38,9 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes>
      * 查询当前用户是否点过赞
      */
     public Likes selectUserLikes(Integer fid,String module) {
+        Integer userId = userIdUtil.getUserId();
         Likes likes = new Likes();
+        likes.setUserId(userId);
         likes.setFid(fid);
         likes.setModule(module);
         return likesMapper.selectUserLikes(likes);

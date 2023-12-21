@@ -1,7 +1,8 @@
 package sw.com.mapper;
 
-import sw.com.entity.dto.Collect;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import sw.com.entity.dto.Collect;
 
 /**
 * @author 张培辉
@@ -13,7 +14,7 @@ public interface CollectMapper extends BaseMapper<Collect> {
 
     Collect selectUserCollect(Collect collect);
 
-    int selectByFidAndModule(Integer fid, String module);
+    int selectByFidAndModule(@Param("fid") Integer fid, @Param("module") String module);
 }
 
 

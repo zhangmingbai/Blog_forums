@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sw.com.entity.dto.Collect;
 import sw.com.mapper.CollectMapper;
 import sw.com.service.CollectService;
+import sw.com.utils.UserIdUtil;
 
 /**
 * @author 张培辉
@@ -19,13 +20,17 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect>
     @Resource
     CollectMapper collectMapper;
 
+    @Resource
+    UserIdUtil userIdUtil;
+
     public void set(Collect collect) {
-        collect.setUserId(collect.getUserId());
-        Collect collect1 = collectMapper.selectUserCollect(collect);
-        if (collect1 == null) {
+        Integer userId = userIdUtil.getUserId();
+        collect.setUserId(userId);
+        Collect dblCollect = collectMapper.selectUserCollect(collect);
+        if (dblCollect == null) {
             collectMapper.insert(collect);
         } else {
-            collectMapper.deleteById(collect1.getId());
+            collectMapper.deleteById(dblCollect.getId());
         }
     }
 
@@ -33,7 +38,9 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect>
      * 查询当前用户是否收藏过
      */
     public Collect selectUserCollect(Integer fid, String module) {
+        Integer userId = userIdUtil.getUserId();
         Collect collect = new Collect();
+        collect.setUserId(userId);
         collect.setFid(fid);
         collect.setModule(module);
         return collectMapper.selectUserCollect(collect);

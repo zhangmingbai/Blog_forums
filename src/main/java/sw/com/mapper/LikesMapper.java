@@ -1,7 +1,8 @@
 package sw.com.mapper;
 
-import sw.com.entity.dto.Likes;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import sw.com.entity.dto.Likes;
 
 /**
 * @author 张培辉
@@ -11,7 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface LikesMapper extends BaseMapper<Likes> {
 
-    int selectByFidAndModule(Integer fid, String module);
+    int selectByFidAndModule(@Param("fid") Integer fid, @Param("module") String module);
 
     Likes selectUserLikes(Likes likes);
 }
