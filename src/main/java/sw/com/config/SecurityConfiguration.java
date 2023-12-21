@@ -1,10 +1,13 @@
 package sw.com.config;
 
+import com.alibaba.fastjson2.JSON;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,6 +31,12 @@ import java.io.PrintWriter;
 public class SecurityConfiguration {
     @Resource
     JwtUtils utils;
+
+    @Resource
+    StringRedisTemplate template;
+
+    @Value("${spring.security.jwt.key}")
+    String key;
 
     @Resource
     JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -79,6 +88,7 @@ public class SecurityConfiguration {
         vo.setEmail(account.getEmail());
         vo.setPhone(account.getPhone());
         vo.setToken(token);
+        template.opsForValue().set(key, JSON.toJSONString(vo));
         response.getWriter().write(RestBean.success(vo).asJsonString());  // 返回用户信息
     }
 
@@ -92,6 +102,7 @@ public class SecurityConfiguration {
         PrintWriter writer = response.getWriter();  // 获取响应输出流
         String authorization = request.getHeader("Authorization");  // 获取请求头中的令牌
         if(utils.invalidateJwt(authorization)) {  // 使令牌失效
+            template.delete(key);  // 删除Redis中的key
             writer.write(RestBean.success("退出登录成功").asJsonString()); // 返回成功信息
             return;
         }

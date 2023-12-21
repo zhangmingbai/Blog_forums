@@ -88,7 +88,7 @@ public class JwtUtils {
      * @param headerToken 请求头中的Token
      * @return 转换后的令牌
      */
-    private String convertToken(String headerToken){
+    public String convertToken(String headerToken){
         if(headerToken == null || !headerToken.startsWith("Bearer "))
             return null;
         return headerToken.substring(7);
