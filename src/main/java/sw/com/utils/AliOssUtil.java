@@ -12,13 +12,13 @@ import java.io.InputStream;
 public class AliOssUtil {
 
     // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
-    private static final String ENDPOINT = "https://oss-cn-shenzhen.aliyuncs.com";
+    private static final String ENDPOINT = "";
     // 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量OSS_ACCESS_KEY_ID和OSS_ACCESS_KEY_SECRET。
     //EnvironmentVariableCredentialsProvider credentialsProvider = CredentialsProviderFactory.newEnvironmentVariableCredentialsProvider();
-    private static final String ACCESS_KEY_ID="LTAI5tGPTdwes3JnJX2kokVP";
-    private static final String ACCESS_KEY_SECRET="F8ZkJkM3BxwyZNT2XrFkXnk6Ifm6rE";
+    private static final String ACCESS_KEY_ID="";
+    private static final String ACCESS_KEY_SECRET="";
     // 填写Bucket名称，例如examplebucket。
-    private static final String BUCKET_NAME = "xiaohuibishe";
+    private static final String BUCKET_NAME = "";
 
     public static String uploadFile(String objectName, InputStream in) {
 
